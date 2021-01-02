@@ -11,8 +11,10 @@ var svgns = document.getElementById('total');
     var gestRadius = gestMax;
 
     var control = true;
-    var incrementer = .1;
-    var step = .0035;
+    //var incrementer = .1;
+    //var step = .0035;
+    var incrementer = -1;
+    var step = 1;
 
 
 function updateCircle() {
@@ -27,9 +29,12 @@ function updateCircle() {
 }
 
 function decrease() {
-    gestRadius -= (1 / incrementer);
-    incrementer -= step;
-    console.log("decrementar");
+    //gestRadius -= (1 / incrementer);
+    //incrementer -= step;
+    gestRadius += incrementer;
+    incrementer--;
+    console.log(incrementer);
+    console.log(gestRadius);
     drawCircle();
 }
 
