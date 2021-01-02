@@ -6,45 +6,40 @@ var svgns = document.getElementById('total');
     gest.classList.add('gesture');
     svgns.appendChild(gest);
 
-    var gestMax = 150;
+    var gestMax = 250;
     var gestMin = 50;
-    var gestRadius = 50;
+    var gestRadius = gestMax;
 
-    var amount = gestMax - gestMin;
-    var counter = 0;
+    var control = true;
     var incrementer = .1;
     var step = .0035;
 
 
-/*function updateCircle() {
-    //Ease out (Start fast, end slow)
-    if(counter <= amount) {
-        gestRadius += (1 / incrementer);
-        incrementer += step;
-        counter++;
-        drawCircle();
-        } else if(counter > amount) {
-            counter = 0; 
-            incrementer = -.1;
-            step *= -1;
-            updateCircle();
-        }
-} */
-
-var velocity = 1;
-
 function updateCircle() {
-    if(gestRadius != gestMax || gestRadius != gestMin) {
-        gestRadius += velocity;
-        console.log(gestRadius);
-        counter++;
-        drawCircle()
-    } else if(gestRadius == gestMax || gestRadius == gestMin) {
-        velocity *= -1;
-        updateCircle();
-    }
+    //Ease out (Start fast, end slow)
+    if((gestRadius >= gestMin) && control) {        
+        control = true;
+        decrease();
+        } else if((gestRadius <= gestMax) && !control) {
+            control = false;
+            increase();
+        }
 }
- 
+
+function decrease() {
+    gestRadius -= (1 / incrementer);
+    incrementer -= step;
+    console.log("decrementar");
+    drawCircle();
+}
+
+function increase() {
+    gestRadius += (1 / incrementer);
+    incrementer += step;
+    console.log("incrementar");
+    drawCircle();
+}
+
 function drawCircle() {    
     gest.setAttribute('cx', 250);
     gest.setAttribute('cy', 250);
