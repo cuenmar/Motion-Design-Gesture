@@ -1,4 +1,9 @@
-.gesture {
-    fill-opacity: 50;
-    fill: rgba(88, 88, 247, 0.637);
+.cs1 {
+    fill: rgba(122, 122, 250);
+}
+
+.cs2 {
+    fill-opacity: 0;
+    stroke:  rgb(73, 73, 252);
+    stroke-width:15px;
 }

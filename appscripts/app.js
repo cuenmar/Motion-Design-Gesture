@@ -1,86 +1,77 @@
+// Tap UX gesture in Javascript
 var svgns = document.getElementById('total');
-
-//Ejemplo de GESTO
-//Los gestos suelen estar representados en círculos, que representan la punta de nuestros dedos
-    var c1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    c1.classList.add('cs1');
-    svgns.appendChild(c1);
-
-    var c2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    c2.classList.add('cs2');
-    svgns.appendChild(c2);   
+var cstyle = ['cs1', 'cs2'];
+var c = [];
+for(var i = 0; i < 2; i++) {
+    c[i] = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c[i].classList.add(cstyle[i]);
+    svgns.appendChild(c[i]);
+} 
     
-    //Scale
-    var r1Min = 70;
-    var r1Max = 100;
-    var r2Max = 120;
-    var r1 = r1Max;
-    var r2 = r2Max;
-    //Opacity
-    var o1Min = 0.3;
-    var o1Max = 0.6;
-    var o1 = o1Min;
-
     var control = true;
     //Velocity and easing
     var ease = 0.1;
     var tOut = 10;
-
+     //Scale
+     var rMin = [70, 50];
+     var rMax = [100, 120];
+     var r = [rMax[0], rMax[1]];    
+     //Opacity
+     var oMin = [0, 0];
+     var oMax = [0.6, 0.7];
+     var o = [oMin[0], oMin[1]];
 
 function updateCircle() {
-    if(r1 != r1Min && control){
+    if(r[0] != rMin[0] && control){
         decrease();
         }
-    else if (r1 != r1Max && !control) {
+    else if (r[0] != rMax[0] && !control) {
         increase();
         }
     }
 
 function decrease() {
-    var d = r1 - r1Min;
-    var v =  d * ease;
-    r1 -= v;
-    var t = (o1Max - o1) * ease;
-    o1 += t;
-    r2 = r2 * 0.9;
-    if(d < 0.1) {
-        r1 = r1Min;
-        r2 = r1Min;
-        o1 = o1Max;
-        control = false;
+    var d = r[0] - rMin[0];
+    for(var i = 0; i < 2; i++) {
+        r[i] -= ((r[i] - rMin[i]) *ease)
+        o[i] += ((oMax[i] - o[i]) * ease)
     }
-    drawCircle();
+    if(d < 0.1) {
+        r[0] = rMin[0];
+        o[0] = oMax[0];
+        control = false;
+    }  
+    drawCircle(); 
 }
 
 function increase() {
-    var d = r1Max - r1;
-    var v = d * ease;
-    r1 += v;
-    var t = (o1 - o1Min) * ease;
-    o1 -= t;
+    var d = rMax[0] - r[0];
+    for(var i = 0; i < 2; i++) {
+        r[i] += ((rMax[i] - r[i]) *ease)
+        o[i] -= ((o[i] - oMin[i]) * ease)
+    }
     if(d < 0.1) {
-        r1 = r1Max;
-        o1 = o1Min;
+        for(var i = 0; i < 2; i++) {
+        r[0] = rMax[0];
+        o[i] = oMin[1];
+        }
+        location.reload();
     }
     drawCircle();
 }
 
-
-
-function drawCircle() {    
-    c1.setAttribute('cx', 250);
-    c1.setAttribute('cy', 250);
-    c1.setAttribute('r', r1);
-    c1.setAttribute("fill-opacity", o1);
-    c2.setAttribute('cx', 250);
-    c2.setAttribute('cy', 250);
-    c2.setAttribute('r', r2);
-    c2.setAttribute("stroke-opacity", o1);
-    console.log(r1);
+function drawCircle() {  
+    for(var i = 0; i < 2; i++) {  
+        c[i].setAttribute('cx', 250);
+        c[i].setAttribute('cy', 250);
+        c[i].setAttribute('r', r[i]);
+        c[i].setAttribute("fill-opacity", o[i]);
+        c[i].setAttribute("stroke-opacity", o[i]); 
+    }
     setTimeout( function(){
         updateCircle();
-       }, tOut);        
+    }, tOut); 
 }
 
-
-drawCircle();
+var gesture = document.getElementById("total");
+gesture.addEventListener("click", drawCircle);
